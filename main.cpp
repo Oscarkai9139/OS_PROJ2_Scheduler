@@ -11,7 +11,7 @@
 #include <vector>
 #include <algorithm>
 
-#define DEBUG 1 //print details for debug
+#define DEBUG 0 //print details for debug
 
 #define FCFS 0  //first come first-served scheduling
 #define SJN 0   //shortest-job-next scheduling
@@ -54,6 +54,8 @@ typedef struct _cpu{
     STATUS status;
 } CPU;
 
+int average(vector<PD> Processes){
+}
 
 int main(){
     string data;
@@ -196,7 +198,7 @@ int main(){
             cout << " cpu get " << cpu1.thread1.id << " b:" << cpu1.thread1.burst_time  << endl;;
 
 #if RR == 1            
-            quantum = 3;
+            quantum = QUAN_TIME;
 #endif            
             cpu1.status = Busy;
         }
@@ -226,11 +228,28 @@ int main(){
     
     //=====================output details=====================================//
     cout << endl << "===================================" << endl;
-    cout << "total context switch = " << context_switch << endl;
-    cout << "total time taken = " << t << endl;
-    cout << "average throughput = " << throughput << endl;
+    cout << "Total context switch = " << context_switch << endl;
+    cout << "Total time taken = " << t << endl;
+    cout << "Average throughput = " << throughput << endl;
 
     
+    float avg_waiting_time = 0;
+    float avg_ta_time = 0;
+    float avg_response_time = 0;
+    for(int i = 0; i < Processes.size(); i++){
+        avg_waiting_time += (float)Processes[i].waiting_time;
+        avg_ta_time += (float)Processes[i].ta_time;
+        avg_response_time += (float)Processes[i].response_time;
+    }
+    avg_waiting_time = avg_waiting_time/Processes.size();
+    avg_ta_time = avg_ta_time/Processes.size();
+    avg_response_time = avg_response_time/Processes.size();
+
+    cout << "Average waiting time = " << avg_waiting_time << endl;
+    cout << "Average turn around time = " << avg_ta_time << endl;
+    cout << "Average response time = " << avg_response_time << endl;
+    cout << "===================================" << endl;
+
     //===================write output file====================================// 
     ofstream output_file;
     output_file.open("output_1.txt"); //open output file for write
