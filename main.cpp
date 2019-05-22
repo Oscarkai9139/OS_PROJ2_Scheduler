@@ -58,6 +58,7 @@ int average(vector<PD> Processes){
 }
 
 int main(){
+    string filename;
     string data;
     vector<PD> Processes;
     vector<PD> Waiting_Processes;
@@ -67,8 +68,9 @@ int main(){
     int job_done = 0;
     float throughput = 0.0;
     
+    filename = "data_1.txt";
     ifstream input_file;
-    input_file.open("data_1.txt"); //open input file for read 
+    input_file.open(filename); //open input file for read 
     
     while(input_file >> data){
         // input_file data format: PID priority burst arrival
@@ -189,13 +191,16 @@ int main(){
         else if(cpu1.status == ContextSwitch){
             
             context_switch += 1; //record number of context switch
-            
+#if DEBUG == 1            
             cout <<"push back " << cpu1.thread1.id << " b:" << cpu1.thread1.burst_time ;
+#endif
             //Context Switch 
             Waiting_Processes.push_back(cpu1.thread1);
             cpu1.thread1 = Waiting_Processes.front();
             Waiting_Processes.erase(Waiting_Processes.begin());
+#if DEBUG == 1
             cout << " cpu get " << cpu1.thread1.id << " b:" << cpu1.thread1.burst_time  << endl;;
+#endif
 
 #if RR == 1            
             quantum = QUAN_TIME;
@@ -227,7 +232,20 @@ int main(){
     throughput_output.close();
     
     //=====================output details=====================================//
-    cout << endl << "===================================" << endl;
+    cout << endl; 
+    cout << filename << endl;
+#if FCFS == 1
+    cout << "First-Come, First-Served(FCFS) Scheduling" << endl;
+#elif SJN == 1
+    cout << "Shortest-Job-Next(SJN) Scheduling" << endl;
+#elif SRTFS == 1
+    cout << "Shortest-Remaining-Time-First Scheduling" << endl;
+#elif PS == 1
+    cout << "Proiority Scheduling" << endl;
+#elif RR == 1
+    cout << "Round-Robin Sceduling" << endl;
+#endif                
+    cout << "=========================================" << endl;
     cout << "Total context switch = " << context_switch << endl;
     cout << "Total time taken = " << t << endl;
     cout << "Average throughput = " << throughput << endl;
@@ -248,7 +266,7 @@ int main(){
     cout << "Average waiting time = " << avg_waiting_time << endl;
     cout << "Average turn around time = " << avg_ta_time << endl;
     cout << "Average response time = " << avg_response_time << endl;
-    cout << "===================================" << endl;
+    cout << "=========================================" << endl;
 
     //===================write output file====================================// 
     ofstream output_file;
