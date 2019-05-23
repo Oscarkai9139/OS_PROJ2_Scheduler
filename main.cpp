@@ -252,9 +252,13 @@ int main(){
 
     
     float avg_waiting_time = 0;
+    float max_waiting_time = Processes[0].waiting_time;
     float avg_ta_time = 0;
     float avg_response_time = 0;
+
     for(int i = 0; i < Processes.size(); i++){
+        if(Processes[i].waiting_time > max_waiting_time) max_waiting_time = Processes[i].waiting_time;
+        
         avg_waiting_time += (float)Processes[i].waiting_time;
         avg_ta_time += (float)Processes[i].ta_time;
         avg_response_time += (float)Processes[i].response_time;
@@ -266,6 +270,7 @@ int main(){
     cout << "Average waiting time = " << avg_waiting_time << endl;
     cout << "Average turn around time = " << avg_ta_time << endl;
     cout << "Average response time = " << avg_response_time << endl;
+    cout << "Maximum waiting time = " << max_waiting_time << endl;
     cout << "=========================================" << endl;
 
     //===================write output file====================================// 
