@@ -1,36 +1,45 @@
 CXX:=g++
-FCFS=0
+#scheduler selector 
+FCFS=1
 SJN=0
 SRTFS=0
 PS=0
-RR=1
+RR=0
 
+#debug mode for developer
+DEBUG=1
+
+DFLAGS=
 ifeq ($(FCFS), 1)
-	SCHEDULER=FCFS
+	DFLAGS=-DFCFS
 else ifeq ($(SJN), 1)
-	SCHEDULER=SJN
+	DFLAGS=-DSJN
 else ifeq ($(SRTFS), 1)
-	SCHEDULER=SRTFS
+	DFLAGS=-SRTFS
 else ifeq ($(PS), 1)
-	SCHEDULER=PS
+	DFLAGS=-DPS
 else ifeq ($(RR), 1)
-	SCHEDULER=RR
+	DFLAGS=-DRR
+endif
+
+ifeq ($(DEBUG),1)
+	DFLAGS += -DDEBUG
 endif
 
 TARGET=scheduler
 
 $(TARGET): main.cpp
-	$(CXX) -o $@ -D$(SCHEDULER)=1 $<
+	$(CXX) -o $@ $(foreach n,$(DFLAGS),$(n)=1) $<
 fcfs: main.cpp
-	$(CXX) -o $(TARGET) -DFCFS=1 $<
+	$(CXX) -o $(TARGET) $(DFLAGS)=1 -DFCFS=1 $<
 sjn: main.cpp
-	$(CXX) -o $(TARGET) -DSJN=1 $<
+	$(CXX) -o $(TARGET) $(DFLAGS)=1 -DSJN=1 $<
 srtfs: main.cpp
-	$(CXX) -o $(TARGET) -DSRTFS=1 $<
+	$(CXX) -o $(TARGET) $(DFLAGS)=1 -DSRTFS=1 $<
 ps: main.cpp
-	$(CXX) -o $(TARGET) -DPS=1 $<
+	$(CXX) -o $(TARGET) $(DFLAGS)=1 -DPS=1 $<
 rr: main.cpp
-	$(CXX) -o $(TARGET) -DRR=1 $<
+	$(CXX) -o $(TARGET) $(DFLAGS)=1 -DRR=1 $<
 
 clean:
 	rm -rf $(TARGET)

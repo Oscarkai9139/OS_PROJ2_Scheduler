@@ -11,7 +11,7 @@
 #include <vector>
 #include <algorithm>
 
-#define DEBUG 0 //print details for debug
+//#define DEBUG 0 //print details for debug
 
 /*
 #define FCFS 0  //first come first-served scheduling
@@ -70,6 +70,7 @@ int main(){
     filename = "data_1.txt";
     ifstream input_file;
     input_file.open(filename); //open input file for read 
+    if(!input_file.is_open()) return 0;
     
     while(input_file >> data){
         // input_file data format: PID priority burst arrival
