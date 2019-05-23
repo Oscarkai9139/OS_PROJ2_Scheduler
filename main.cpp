@@ -13,11 +13,13 @@
 
 #define DEBUG 0 //print details for debug
 
+/*
 #define FCFS 0  //first come first-served scheduling
 #define SJN 0   //shortest-job-next scheduling
 #define SRTFS 0 //shortest-remaining-time-first scheduling
 #define PS 0    //priority scheduling
 #define RR 0    //round-robin scheduling
+*/
 
 #define QUAN_TIME 3 //quantum time
 
@@ -53,9 +55,6 @@ typedef struct _cpu{
     PD thread1;
     STATUS status;
 } CPU;
-
-int average(vector<PD> Processes){
-}
 
 int main(){
     string filename;
