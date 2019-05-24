@@ -110,15 +110,15 @@ int main(int argc, char **argv){
     t = 0;     //time 
     Waiting_Processes.clear();
 
-
-    int context_switch = 0; //number of context switch
+    int preemptive_context_switch = 0; //total number of preemptive context switch
+    int context_switch = 0; //total number of context switch
     int quantum = QUAN_TIME;        //quantum time    
 
     cpu1.status = Idle; //initial cpu1 are in Idle status  
 
     //write dynamic throughput output 
     ofstream throughput_output;
-    throughput_output.open("throughput_1.txt"); //open output file for write
+    throughput_output.open("throughput.txt"); //open output file for write
     throughput_output << "time\tjob done\tthroughput" << endl;
     while(true){
    
@@ -169,6 +169,7 @@ int main(int argc, char **argv){
                     if(Waiting_Processes.size() == 0) cpu1.status = Idle; //let cpu in status state
                     else {
                             quantum = QUAN_TIME; //reset quantum time for new loaded processs
+                            context_switch += 1;
 
                             cpu1.thread1 = Waiting_Processes.front();
                             Waiting_Processes.erase(Waiting_Processes.begin());
@@ -188,6 +189,7 @@ int main(int argc, char **argv){
             if(!Waiting_Processes.empty()){
 
                 quantum = QUAN_TIME; //reset quantum time for new loaded processs
+                context_switch += 1;
 
                 cpu1.thread1 = Waiting_Processes.front();
                 Waiting_Processes.erase(Waiting_Processes.begin());
@@ -197,7 +199,8 @@ int main(int argc, char **argv){
         }
         else if(cpu1.status == ContextSwitch){
             
-            context_switch += 1; //record number of context switch
+            context_switch += 1;
+            preemptive_context_switch += 1; //record number of context switch
 #if DEBUG == 1            
             cout <<"push back " << cpu1.thread1.id << " b:" << cpu1.thread1.burst_time ;
 #endif
@@ -253,6 +256,7 @@ int main(int argc, char **argv){
     cout << "Round-Robin Sceduling" << endl;
 #endif                
     cout << "=========================================" << endl;
+    cout << "total preemptive context switch = " << preemptive_context_switch << endl;
     cout << "Total context switch = " << context_switch << endl;
     cout << "Total time taken = " << t << endl;
     cout << "Average throughput = " << throughput << endl;
@@ -282,7 +286,7 @@ int main(int argc, char **argv){
 
     //===================write output file====================================// 
     ofstream output_file;
-    output_file.open("output_1.txt"); //open output file for write
+    output_file.open("output.txt"); //open output file for write
     output_file << "id\tprio\tburst\tarrive\twaiting\tta time\tresponse" << endl;
     for(int i = 0; i < Processes.size(); i ++){
         output_file << Processes[i].id << "\t" << Processes[i].priority << "\t";
