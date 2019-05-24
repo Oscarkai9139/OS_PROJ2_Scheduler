@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <cstdio>
 #include <string>
 #include <fstream>
 #include <vector>
@@ -56,7 +57,7 @@ typedef struct _cpu{
     STATUS status;
 } CPU;
 
-int main(){
+int main(int argc, char **argv){
     string filename;
     string data;
     vector<PD> Processes;
@@ -67,11 +68,17 @@ int main(){
     int job_done = 0;
     float throughput = 0.0;
     
-    filename = "data_1.txt";
+    if(argc != 2){
+        cerr << "Usage: " << argv[0] << " path_to_input_file" << endl;
+        return 1;
+    }
+    filename = argv[1];
     ifstream input_file;
     input_file.open(filename); //open input file for read 
-    if(!input_file.is_open()) return 0;
-    
+    if(!input_file.is_open()){
+        perror("Error");
+        return 1;
+    }
     while(input_file >> data){
         // input_file data format: PID priority burst arrival
         if(data.find("P") == 0){
